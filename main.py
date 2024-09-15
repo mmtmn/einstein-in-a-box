@@ -4,7 +4,7 @@ import subprocess
 
 # Function to get the number of iterations from the user
 def get_iterations():
-    return int(input("How many loops would you like to do? "))
+    return int(input("How many improvements would you like to do? "))
 
 # Function to write the equation to the file
 def write_equation_to_file(equation):
