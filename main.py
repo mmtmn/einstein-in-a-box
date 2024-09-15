@@ -6,7 +6,7 @@ import subprocess
 def get_iterations():
     return int(input("How many improvements would you like to do? "))
 
-# Function to write the equation or subject to the file
+# Function to write the content to the file
 def write_to_file(filename, content):
     with open(filename, "w") as file:
         file.write(content)
@@ -63,15 +63,21 @@ def get_api_feedback(content, conversation, improvement_request):
 
 # Main function to run the loop
 def main():
-    # Load the context and improvement request from .txt files
+    # Load the context, professor message, and improvement request from .txt files
     content = read_from_file("content.txt")
+    professor_message = read_from_file("professor_message.txt")
     improvement_request = read_from_file("improvement_request.txt")
     
-    # Check if both files are present and valid
+    # Check if all files are present and valid
     if not content:
         print("No content found in 'content.txt'. Please provide the initial content (e.g., equation, biology problem, etc.).")
         content = input("Enter the initial content: ")
         write_to_file("content.txt", content)
+
+    if not professor_message:
+        print("No professor message found in 'professor_message.txt'. Please provide the initial professor message.")
+        professor_message = input("Enter the professor message: ")
+        write_to_file("professor_message.txt", professor_message)
 
     if not improvement_request:
         print("No improvement request found in 'improvement_request.txt'. Please provide the improvement request (e.g., ask for novel insight or improvements).")
@@ -81,13 +87,13 @@ def main():
     # Initialize an empty conversation
     conversation = []
 
+    # Start with the professor message, asking the AI to critique the equation
+    conversation.append({"role": "user", "content": professor_message})
+
     # Get the number of loops from the user
     loops = get_iterations()
 
     for _ in range(loops):
-        # Read the current content from file
-        content = read_from_file("content.txt")
-
         # Send the content to the API and get feedback
         new_content, conversation = get_api_feedback(content, conversation, improvement_request)
 
