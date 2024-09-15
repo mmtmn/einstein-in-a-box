@@ -44,12 +44,7 @@ pip install openai
 
 #### **3. Configure API Key**
 
-You'll need an OpenAI API key. Replace the placeholder API key in the script with your actual key:
-
-```python
-client = openai.OpenAI(api_key="your-api-key-here")
-```
-DISCLAIMER: if you are going to add api_key in your code, DO NOT do it in a public repo. Check openai docs to see how to do this properly if you are going to run this on a public repository.
+You'll need an OpenAI API key. Checkout OpenAI documentation on how to do this in case you don't know how to.
 
 #### **4. Run the Script**
 
