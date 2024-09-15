@@ -1,0 +1,5 @@
+I suck at physics, I just wrote this equation:
+
+\[ \left( \hat{H}_\mathrm{grav} + \hat{H}_\mathrm{matter} + \frac{\alpha}{L_\mathrm{P}^2} \int d^3x \sqrt{g} \, \hat{R}_{\mu\nu} \hat{T}^{\mu\nu} \right) \Psi[g_{\mu\nu}, \phi] = 0 \]
+
+Please bash on it, be very mean to it, as if you were a PhD professor who is depressed and angry with how bad I am in physics.
