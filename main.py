@@ -6,15 +6,15 @@ import subprocess
 def get_iterations():
     return int(input("How many improvements would you like to do? "))
 
-# Function to write the equation to the file
-def write_equation_to_file(equation):
-    with open("equation.txt", "w") as file:
-        file.write(equation)
+# Function to write the equation or subject to the file
+def write_to_file(filename, content):
+    with open(filename, "w") as file:
+        file.write(content)
 
-# Function to read the equation from the file
-def read_equation_from_file():
-    if os.path.exists("equation.txt"):
-        with open("equation.txt", "r") as file:
+# Function to read from a file
+def read_from_file(filename):
+    if os.path.exists(filename):
+        with open(filename, "r") as file:
             return file.read()
     else:
         return ""
@@ -22,16 +22,16 @@ def read_equation_from_file():
 # Function to commit and push changes to GitHub
 def update_repo():
     subprocess.run(["git", "add", "."])
-    subprocess.run(["git", "commit", "-m", "Update equation"])
+    subprocess.run(["git", "commit", "-m", "Update content"])
     subprocess.run(["git", "push"])
 
-# Function to call the API and get feedback on the equation
-def get_api_feedback(equation, conversation):
+# Function to call the API and get feedback on the content
+def get_api_feedback(content, conversation, improvement_request):
     # Initialize the OpenAI API client
     client = openai.OpenAI()
 
-    # Add the equation to the conversation
-    conversation.append({"role": "user", "content": f"I suck at physics, I just wrote this equation:\n\n{equation}"})
+    # Add the content (e.g., equation or subject matter) to the conversation
+    conversation.append({"role": "user", "content": f"{content}"})
 
     # Send the conversation to the API
     response = client.chat.completions.create(
@@ -45,31 +45,38 @@ def get_api_feedback(equation, conversation):
     # Append the API feedback to the conversation
     conversation.append({"role": "assistant", "content": feedback})
 
-    # Now send the feedback back to the API and ask for an improved equation
-    conversation.append({"role": "user", "content": "Based on your feedback, improve the equation and address all points. We are aiming for winning a Nobel here, so the equation needs to be novel. Reply only with the equation."})
+    # Now send the feedback back to the API and ask for an improved content
+    conversation.append({"role": "user", "content": f"{improvement_request}"})
 
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=conversation
     )
 
-    # Extract the new equation from the API response
-    new_equation = response.choices[0].message.content
+    # Extract the new content from the API response
+    new_content = response.choices[0].message.content
 
-    # Append this new equation to the conversation and return it
-    conversation.append({"role": "assistant", "content": new_equation})
+    # Append this new content to the conversation and return it
+    conversation.append({"role": "assistant", "content": new_content})
 
-    return new_equation, conversation
+    return new_content, conversation
 
 # Main function to run the loop
 def main():
-    # Read the current equation from file, or set to a default if it doesn't exist
-    equation = read_equation_from_file()
+    # Load the context and improvement request from .txt files
+    content = read_from_file("content.txt")
+    improvement_request = read_from_file("improvement_request.txt")
     
-    if not equation:
-        print("No equation found in 'equation.txt'. Please provide an initial equation.")
-        equation = input("Enter the initial equation: ")
-        write_equation_to_file(equation)
+    # Check if both files are present and valid
+    if not content:
+        print("No content found in 'content.txt'. Please provide the initial content (e.g., equation, biology problem, etc.).")
+        content = input("Enter the initial content: ")
+        write_to_file("content.txt", content)
+
+    if not improvement_request:
+        print("No improvement request found in 'improvement_request.txt'. Please provide the improvement request (e.g., ask for novel insight or improvements).")
+        improvement_request = input("Enter the improvement request: ")
+        write_to_file("improvement_request.txt", improvement_request)
 
     # Initialize an empty conversation
     conversation = []
@@ -78,19 +85,19 @@ def main():
     loops = get_iterations()
 
     for _ in range(loops):
-        # Read the current equation from file
-        equation = read_equation_from_file()
+        # Read the current content from file
+        content = read_from_file("content.txt")
 
-        # Send the equation to the API and get feedback
-        new_equation, conversation = get_api_feedback(equation, conversation)
+        # Send the content to the API and get feedback
+        new_content, conversation = get_api_feedback(content, conversation, improvement_request)
 
-        # Update the equation file with the new equation
-        write_equation_to_file(new_equation)
+        # Update the content file with the new content
+        write_to_file("content.txt", new_content)
 
-        # Update the GitHub repository with the new equation
+        # Update the GitHub repository with the new content
         update_repo()
 
-        print(f"Equation updated! New equation:\n{new_equation}")
+        print(f"Content updated! New content:\n{new_content}")
 
 if __name__ == "__main__":
     main()
