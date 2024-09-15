@@ -126,7 +126,7 @@ This script is a fun, experimental project! The content produced may not be scie
 
 ---
 
-Now, fire up the loop and start refining your equations, models, or theorems. Who knows? You might just create the next revolutionary discovery! 😊
+🍓
 
 ---
 
