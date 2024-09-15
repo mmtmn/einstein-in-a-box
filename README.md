@@ -44,7 +44,9 @@ pip install openai
 
 #### **3. Configure API Key**
 
-You'll need an OpenAI API key. Checkout OpenAI documentation on how to do this in case you don't know how to.
+You'll need an OpenAI API key. Checkout OpenAI's documentation on how to do this in case you don't know how to.
+
+DO NOT HARDCODE THE KEY, IT WILL LEAK IF YOU DO SO. If you are going to hardcode the key, make sure to remove the auto github push functionality to it - or do it in a private repository.
 
 #### **4. Run the Script**
 
